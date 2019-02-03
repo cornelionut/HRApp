@@ -1,0 +1,90 @@
+﻿@model MyHR.Domain.Models.BonusXSalary
+@{
+    ViewBag.Title = "Salary";
+}
+
+<h2>Salariu/Bonus</h2>
+<br>
+<div id="add-product">
+
+
+    @using (Html.BeginForm())
+    {
+        <div>
+            <label for="employee">Angajat </label>
+            <br>
+            @(Html.Kendo().ComboBox()
+                                                                                                .Name("IdEmployee")
+                                                                                                .Placeholder("Select angajat")
+                                                                                                .DataTextField("Name")
+                                                                                                .DataValueField("EmployeeId")
+                                                                                                .Filter("contains")
+                                                                                                .AutoBind(false)
+                                                                                                .DataSource(source =>
+                                                                                                   {
+                                                                                                       source.Read(read =>
+                                                                                             {
+                                                                                                 read.Action("ServerFiltering_GetEmployees", "Salary");
+                                                                                             })
+                                                                                                 .ServerFiltering(true);
+                                                                                                   })
+            )
+        </div>
+        <br>
+        <div>
+            <label for="currency">Moneda</label>
+            <br>
+            @(Html.Kendo().ComboBox()
+                                                                       .Name("IdCurrency")
+                                                                       .Placeholder("Select moneda")
+                                                                       .DataTextField("Name")
+                                                                       .DataValueField("Id")
+                                                                       .Filter("contains")
+                                                                       .AutoBind(false)
+                                                                       .DataSource(source =>
+                                                                          {
+                                                                              source.Read(read =>
+                                                                   {
+                                                                       read.Action("ServerFiltering_GetCurrency", "Salary");
+                                                                   })
+                                                               .ServerFiltering(true);
+                                                                          })
+            )
+        </div>
+        <br>
+        <div>
+            <label for="amount">Valoare </label>
+            <br>
+            @(Html.Kendo().NumericTextBox<decimal>()
+                                                                                     .Name("Amount")
+                                                                                     .Value(0)
+                                                                                     .Placeholder("Salariu...")
+                                                                                     .HtmlAttributes(new { title = "currency" })
+            )
+
+
+        </div>
+        <br>
+        <div>
+            <label for="date">Data </label>
+            <br>
+            @(Html.Kendo().DatePicker()
+                                                                                 .Name("StartDate")
+                                                                                 .Value(DateTime.Today)
+                                                                                 .HtmlAttributes(new { title = "datepicker" })
+            )
+
+        </div>
+        <br>
+        <input type="submit" name="submit" value="Salvare" />
+        <input type="submit" name="submit" value="Anulare" />
+        <input type="submit" name="submit" value="Salvare/Nou" />
+
+
+    }
+
+</div>
+
+<script>
+   
+</script>

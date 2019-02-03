@@ -1,0 +1,20 @@
+CREATE TABLE Employee(
+  EmployeeId int identity(0,1) primary key,
+  Name NVARCHAR(100),
+  Surname NVARCHAR(100),
+  PIN NVARCHAR(13),
+  AddressId int not null,
+  StateId int not null,
+  EmploymentDate date not null,
+  Picture image,
+  ManagerId int,
+  DepartmentId int not null,
+  PositionId int not null,
+  UserId NVARCHAR(128),
+       CONSTRAINT [FK_EmployeeAddress_Employee] foreign key (AddressId)references EmployeeAddress (AddressId),
+	   CONSTRAINT [FK_State_Employee] foreign key (StateId)references SysState (SysStateId),
+	   CONSTRAINT [FK_Department_Employee] foreign key (DepartmentId)references SysDepartment (SysDepartmentId),
+	   CONSTRAINT [FK_Position_Employee] foreign key (PositionId)references SysPosition (SysPositionId),
+	   CONSTRAINT [FK_Manager_Employee] foreign key (ManagerId)references Employee(EmployeeId),
+	   CONSTRAINT [FK_User] foreign key (UserId) references AspNetUsers(Id)
+);

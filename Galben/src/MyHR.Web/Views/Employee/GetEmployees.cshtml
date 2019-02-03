@@ -1,0 +1,150 @@
+﻿@model System.Collections.Generic.List<MyHR.Domain.Models.Employee>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    
+
+</head>
+<body>
+    <br >
+    <div>
+        Nume Angajat:
+        @Html.Kendo().TextBox().Name("NameSearchTextBox")
+        Departament:
+        @(Html.Kendo().ComboBox()
+                    .Name("departmentcb")
+                    .DataTextField("name")
+                    .DataValueField("id")
+                    .Filter("contains")
+                    .MinLength(1)
+                    .AutoBind(false)
+
+                    .DataSource(source =>
+                    {
+                    source.Read(read =>
+                    {
+                    read.Action("GetDepartments", "Dictionary")
+                    .Data("departmentSelect");
+                    })
+                    .ServerFiltering(true);
+                    })
+                    )
+       @(Html.Kendo().Button()
+        .Name("SearchButton")
+        .Content("Cauta")
+        .Events(e => e.Click("SearchClick"))
+        )
+        @(Html.Kendo().Button()
+        .Name("ResetButton")
+        .Content("Reseteaza")
+        .Events(e => e.Click("ResetClick"))
+        )
+
+</div>
+    <br >
+    <div>
+        @(Html.Kendo().Grid<MyHR.Domain.Models.Employee>
+                    ()
+                    .Name("Grid")
+                    .Columns(columns =>
+                    {
+
+                        columns.Bound(p => p.EmployeeId).Title("EmployeeID").Width(10).Visible(false);
+                        columns.Bound(p => p.Name).Title("Name").Width(100);
+                        columns.Bound(p => p.Surname).Title("Surname").Width(100);
+                        columns.Bound(p => p.DepartmentName).Title("Department").Width(100);
+                        columns.Bound(p => p.Pin).Title("CNP").Width(130);
+                        columns.Bound(p => p.Adresa).Title("Adresa").Width(200);
+                        columns.Bound(p => p.ManagerName).Title("Manager").Width(100);
+                        columns.Bound(p => p.Vechime).Title("Vechime").Width(100);
+
+                        columns.Command(command =>
+                        {
+                            command.Custom("Edit").Click("EditareAngajat");
+                            command.Custom("View Employee Record");
+
+                        }).Width(250);
+                    })
+                    .HtmlAttributes(new { style = "height: 550px;" })
+                    .Pageable(pageable => pageable
+                    .Refresh(true)
+                    .PageSizes(true)
+                    .ButtonCount(10)
+                    .Refresh(false)
+                    )
+
+                    .Sortable()
+                    .Scrollable(scr => scr.Height(430))
+
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Read(read => read.Action("GetEmployeesData", "Employee").Data("Filter"))
+                    .PageSize(20)
+                    .ServerOperation(true)
+
+
+                    )
+                    )
+</div>
+</body>
+
+</html>
+        
+        
+
+<script>
+
+
+            function ResetClick(e) {
+
+        $("#departmentcb").val('');
+        $("#departmentcb").data("kendoComboBox").select(-1);
+        $("#departmentcb").data("kendoComboBox").refresh();
+
+        $("#departmentcb").text('');
+        $("#departmentcb").empty();
+        $("#NameSearchTextBox").val('');
+
+        SearchClick();
+    }
+    function setDDLValue() {
+        var ddl = $("#departmentcb").data("kendoDropDownList");
+        ddl.val("-1");
+
+    }
+    function departmentSelect(e) {
+        return {
+            text: $("#departmentcb").val()
+        };
+    }
+    function SearchClick() {
+        $('#Grid').data('kendoGrid').dataSource.read();
+        $('#Grid').data('kendoGrid').dataSource.refresh();
+    }
+
+    function Filter(e) {
+        var id = $("#departmentcb").val();
+        if (id == "") {
+            id = -1;
+        }
+        return {
+            Name: $("#NameSearchTextBox").val(),
+            IdDepartment: id
+        }
+    }
+
+      function EditareAngajat() {
+
+        window.location.href = "/Employee/AddEmployee";
+
+    }
+
+
+
+
+
+
+
+</script>

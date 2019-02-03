@@ -1,0 +1,75 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "Salary";
+}
+
+
+
+<h2>Salariu/Bonus</h2>
+<div id="add-product">
+
+
+    <label for="employee">Angajat: </label>
+    @(Html.Kendo().ComboBox()
+                                                                           .Name("employee")
+                                                                           .Placeholder("Select angajat")
+                                                                           .DataTextField("Name")
+                                                                           .DataValueField("EmployeeId")
+                                                                           .Filter("contains")
+                                                                           .AutoBind(false)
+                                                                           .MinLength(3)
+                                                                           .DataSource(source =>
+                                                                           {
+                                                                               source.Read(read =>
+                                                                               {
+                                                                                   read.Action("ServerFiltering_GetEmployees", "SalaryBonus");
+                                                                               })
+                                                                               .ServerFiltering(true);
+                                                                           })
+    )
+
+    <label for="currency">Moneda:</label>
+
+    @(Html.Kendo().ComboBox()
+                                                                  .Name("currency")
+                                                                  .Placeholder("Select moneda")
+                                                                  .DataTextField("Name")
+                                                                  .DataValueField("Id")
+                                                                  .Filter("contains")
+                                                                  .AutoBind(false)
+                                                                  .MinLength(3)
+                                                                  .DataSource(source =>
+                                                                  {
+                                                                      source.Read(read =>
+                                                                      {
+                                                                          read.Action("ServerFiltering_GetCurrency", "SalaryBonus");
+                                                                      })
+                                                                      .ServerFiltering(true);
+                                                                  })
+    )
+
+    <label for="amount">Valoare: </label>
+    @(Html.Kendo().NumericTextBox<decimal>()
+                                                                                .Name("amountTextBox")
+                                                                                .Value(0)
+                                                                                .Placeholder("Salariu...")
+                                                                                .HtmlAttributes(new { style = "width: 50%", title = "currency" })
+    )
+
+
+    
+    <label for="date">Data: </label>
+    @(Html.Kendo().DatePicker()
+                                                                               .Name("datepicker")
+                                                                               .Value("10/10/2011")
+                                                                               .HtmlAttributes(new { style = "width: 50%", title = "datepicker" })
+    )
+
+    @Html.Kendo().Button().Name("Salvare").Events(ev => ev.Click("saveSalary")).Content("Save")
+    @Html.Kendo().Button().Name("Salvare").Events(ev => ev.Click("saveSalary")).Content("Save")
+
+</div>
+
+
